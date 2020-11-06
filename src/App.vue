@@ -99,6 +99,52 @@ body {
   align-items: stretch;
 }
 
+button {
+  font-family: Whitney, sans-serif;
+}
+
+input, textarea {
+  min-width: 0;
+  font-family: Whitney, sans-serif;
+  color: #25364a;
+  outline: 0;
+  font-size: 1rem;
+
+  &::placeholder {
+    color: rgba(#25364a, 0.3);
+  }
+
+  &:-ms-input-placeholder {
+    color: rgba(#25364a, 0.3);
+  }
+
+  &::-ms-input-placeholder {
+    color: rgba(#25364a, 0.3);
+  }
+}
+
+input[type=text], input[type=url], textarea {
+  box-sizing: border-box;
+  border-radius: 4px;
+  background: #e1e2e6;
+  border: 1px solid #afb0b3;
+  transition: border-color 0.2s ease-in-out;
+  padding: 0.625rem;
+
+  &:focus {
+    border-color: #175199;
+  }
+
+  &[readonly] {
+    opacity: 0.5;
+  }
+}
+
+textarea {
+  resize: vertical;
+  min-height: 500px;
+}
+
 .app {
   font-family: Whitney, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -108,52 +154,6 @@ body {
   height: 100%;
   display: flex;
   align-items: stretch;
-
-  button {
-    font-family: Whitney, sans-serif;
-  }
-
-  input, textarea {
-    min-width: 0;
-    font-family: Whitney, sans-serif;
-    color: #25364a;
-    outline: 0;
-    font-size: 1rem;
-
-    &::placeholder {
-      color: rgba(#25364a, 0.3);
-    }
-
-    &:-ms-input-placeholder {
-      color: rgba(#25364a, 0.3);
-    }
-
-    &::-ms-input-placeholder {
-      color: rgba(#25364a, 0.3);
-    }
-  }
-
-  input[type=text], textarea {
-    box-sizing: border-box;
-    border-radius: 4px;
-    background: #e1e2e6;
-    border: 1px solid #afb0b3;
-    transition: border-color 0.2s ease-in-out;
-    padding: 0.625rem;
-
-    &:focus {
-      border-color: #175199;
-    }
-
-    &[readonly] {
-      opacity: 0.5;
-    }
-  }
-
-  textarea {
-    resize: vertical;
-    min-height: 500px;
-  }
 
   &__sidebar {
     display: flex;

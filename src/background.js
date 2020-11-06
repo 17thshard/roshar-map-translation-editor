@@ -129,6 +129,7 @@ async function createWindow () {
       preload: path.join(__dirname, 'preload.js'),
       additionalArguments: [`--translation-working-directory=${workingDirectory}`]
     },
+    // eslint-disable-next-line no-undef
     icon: path.join(__static, 'icon.png')
   })
   win.setMenu(null)

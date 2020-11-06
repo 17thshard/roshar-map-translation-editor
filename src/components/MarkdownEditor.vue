@@ -226,9 +226,6 @@ export default {
     isEmpty (s) {
       return s === null || s === undefined ? true : /^[\s\xA0]*$/.test(s)
     },
-    isUrl (s) {
-      return this.isEmpty(s) ? false : s.match(/((http(s)?):\/\/[\w./\-=?#]+)/gi)
-    },
     format () {
       let a = arguments[0]
       for (let i = 1; i <= arguments.length; i++) {
@@ -365,42 +362,17 @@ export default {
       }
       return ret
     },
-    _replaceSelection (active, startEnd, val) {
+    _insertLink (obj) {
+      const text = `${obj.internal ? '#' : ''}[${obj.title}](${obj.url})`
+
       const ed = this.editor
-      let text
-      let start = startEnd[0]
-      let end = startEnd[1]
-      const startPoint = ed.getCursor('start')
-      const endPoint = ed.getCursor('end')
-      if (val) {
-        Object.keys(val).forEach((key) => {
-          start = start.replace('#' + key + '#', val[key])
-          end = end.replace('#' + key + '#', val[key])
-        })
-      }
-      if (active) {
-        text = ed.getLine(startPoint.line)
-        start = text.slice(0, startPoint.ch)
-        end = text.slice(startPoint.ch)
-        ed.replaceRange(start + end, { line: startPoint.line, ch: 0 })
-      } else {
-        ed.replaceSelection(start + end)
-        startPoint.ch += start.length
-        if (startPoint !== endPoint) {
-          endPoint.ch += start.length
-        }
-      }
-      ed.setSelection(startPoint, endPoint)
+      const point = ed.getCursor('end')
+
+      ed.replaceRange(text, point)
     },
-    drawLink (obj) {
-      const stat = this.state()
-      this._replaceSelection(stat.link, ['[#title#]', '(#url# "#title#")'], obj)
-    },
-    command (key) {
+    async command (key) {
       const ed = this.editor
-      const text = ed.getSelection()
       this.$emit('command:' + key, this)
-      let url, title
       switch (key) {
         case 'undo':
           ed.undo()
@@ -423,13 +395,17 @@ export default {
         case 'inline-tn':
           this._toggleBlock('inline-tn', '_[tn](', ')_')
           break
-        case 'link':
-          url = prompt('Please enter link', 'https://')
-          if (this.isUrl(url)) {
-            title = !this.isEmpty(text) ? text : url
-            this.drawLink({ title, url })
+        case 'link': {
+          try {
+            const { data: link } = await this.$dialog.prompt(
+              {},
+              { view: 'link' }
+            )
+            this._insertLink(link)
+          } catch {
           }
           break
+        }
         case 'quote':
           this._toggleLine('quote')
           break

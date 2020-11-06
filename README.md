@@ -5,7 +5,7 @@
 </p>
 <p align="center">
   <a href="https://github.com/Palanaeum/roshar-map/actions?query=workflow%3APages" title="Build workflow">
-    <img src="https://github.com/Palanaeum/roshar-map/workflows/Pages/badge.svg" alt="Build Status" />
+    <img src="https://github.com/Palanaeum/roshar-map-translation-editor/workflows/Build/badge.svg" alt="Build Status" />
   </a>
   <a href="https://discord.gg/nF3gxQCkwk?utm_source=Github&utm_medium=Badge" title="Join Discord">
     <img src="https://img.shields.io/discord/304777819936784385?color=%237289da&label=Join&logo=discord&logoColor=white&labelColor=%23697ec4" alt="Discord" />
