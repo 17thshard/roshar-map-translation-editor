@@ -35,13 +35,13 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: yarn --check-files
-      - run: yarn electron:build --publish onTagOrDraft
+      - run: yarn electron:build
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
       - uses: actions/upload-artifact@v2
         with:
           name: windows-dist
-          path: ./dist_electron
+          path: ./dist_electron/*.exe
 
   macos-build:
     if: ${{ github.event_name == 'push' }}
@@ -58,13 +58,13 @@ jobs:
       - run: yarn --check-files
       # Disable Spotlight indexing due to a error when generating DMG
       - run: mdutil -a -i off
-      - run: yarn electron:build --publish onTagOrDraft
+      - run: yarn electron:build
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
       - uses: actions/upload-artifact@v2
         with:
           name: macos-dist
-          path: ./dist_electron
+          path: ./dist_electron/*.dmg
 
   linux-build:
     if: ${{ github.event_name == 'push' }}
@@ -79,10 +79,13 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: yarn --check-files
-      - run: yarn electron:build --publish onTagOrDraft --linux tar.gz deb rpm
+      - run: yarn electron:build --linux tar.gz deb rpm
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
       - uses: actions/upload-artifact@v2
         with:
           name: linux-dist
-          path: ./dist_electron
+          path: |
+            ./dist_electron/*.tar.gz
+            ./dist_electron/*.deb
+            ./dist_electron/*.rpm
