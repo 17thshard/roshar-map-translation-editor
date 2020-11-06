@@ -121,13 +121,15 @@ async function createWindow () {
 
   // Create the browser window.
   const win = new BrowserWindow({
+    title: 'Roshar Map Translation Editor',
     width: 1200,
     height: 900,
     webPreferences: {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       preload: path.join(__dirname, 'preload.js'),
       additionalArguments: [`--translation-working-directory=${workingDirectory}`]
-    }
+    },
+    icon: path.join(__static, 'icon.png')
   })
   win.setMenu(null)
 

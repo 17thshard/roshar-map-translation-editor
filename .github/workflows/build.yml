@@ -1,0 +1,88 @@
+name: Build
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: yarn --check-files
+      - run: yarn lint
+      - run: yarn build
+        env:
+          NODE_ENV: production
+
+  windows-build:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: yarn --check-files
+      - run: yarn electron:build --publish onTagOrDraft
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: windows-dist
+          path: ./dist_electron
+
+  macos-build:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: yarn --check-files
+      # Disable Spotlight indexing due to a error when generating DMG
+      - run: mdutil -a -i off
+      - run: yarn electron:build --publish onTagOrDraft
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: macos-dist
+          path: ./dist_electron
+
+  linux-build:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: yarn --check-files
+      - run: yarn electron:build --publish onTagOrDraft --linux tar.gz deb rpm
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: linux-dist
+          path: ./dist_electron
