@@ -253,6 +253,12 @@ export default {
         } else if (type === 'strikethrough') {
           start = start.replace(/(\*\*|~~)(?![\s\S]*(\*\*|~~))/, '')
           end = end.replace(/(\*\*|~~)/, '')
+        } else if (type === 'smallCaps') {
+          start = start.replace(/(\^)(?![\s\S]*(\^))/, '')
+          end = end.replace(/(\^)/, '')
+        } else if (type === 'inlineTranslatorNote') {
+          start = start.replace(/(_\[tn]\()(?![\s\S]*(\)_))/, '')
+          end = end.replace(/(\)_)/, '')
         }
         ed.replaceRange(start + end, {
           line: startPoint.line,
@@ -266,10 +272,15 @@ export default {
           if (startPoint !== endPoint) {
             endPoint.ch -= 2
           }
-        } else if (type === 'italic') {
+        } else if (type === 'italic' || type === 'smallCaps') {
           startPoint.ch -= 1
           if (startPoint !== endPoint) {
             endPoint.ch -= 1
+          }
+        } else if (type === 'inlineTranslatorNote') {
+          startPoint.ch -= 6
+          if (startPoint !== endPoint) {
+            endPoint.ch -= 2
           }
         }
       } else {
@@ -280,8 +291,12 @@ export default {
         } else if (type === 'italic') {
           text = text.split('*').join('')
           text = text.split('_').join('')
+        } else if (type === 'smallCaps') {
+          text = text.split('^').join('')
         } else if (type === 'strikethrough') {
           text = text.split('~~').join('')
+        } else if (type === 'inlineTranslatorNote') {
+          text = text.replace(/^(_\[tn]\()/, '').replace(/(\)_)$/, '')
         }
         ed.replaceSelection(start + text + end)
         startPoint.ch += start.length
@@ -366,9 +381,7 @@ export default {
       const text = `${obj.internal ? '#' : ''}[${obj.title}](${obj.url})`
 
       const ed = this.editor
-      const point = ed.getCursor('end')
-
-      ed.replaceRange(text, point)
+      ed.replaceRange(text, ed.getCursor('start'), ed.getCursor('end'))
     },
     async command (key) {
       const ed = this.editor
@@ -387,19 +400,19 @@ export default {
           this._toggleBlock('italic', '*')
           break
         case 'small-caps':
-          this._toggleBlock('small-caps', '^')
+          this._toggleBlock('smallCaps', '^')
           break
         case 'translator-note':
           this._insertTranslatorNote()
           break
         case 'inline-tn':
-          this._toggleBlock('inline-tn', '_[tn](', ')_')
+          this._toggleBlock('inlineTranslatorNote', '_[tn](', ')_')
           break
         case 'link': {
           try {
             const { data: link } = await this.$dialog.prompt(
               {},
-              { view: 'link' }
+              { view: 'link', defaultText: ed.getSelection() }
             )
             this._insertLink(link)
           } catch {

@@ -249,13 +249,12 @@ export default {
       'setDirtyHandler',
       async (to, from, next) => {
         if (to.name.startsWith('locale.messages') && to.params.locale === from.params.locale) {
-          this.$store.commit('removeDirtHandler')
           next()
           return
         }
 
         if (!this.dirty) {
-          this.$store.commit('removeDirtHandler')
+          this.$store.commit('removeDirtyHandler')
           next()
           return
         }
@@ -270,7 +269,7 @@ export default {
             this.save()
           }
 
-          this.$store.commit('removeDirtHandler')
+          this.$store.commit('removeDirtyHandler')
           next()
         } catch {
           next(false)
@@ -283,7 +282,14 @@ export default {
       const segments = path.split('.')
       const key = segments.pop()
       const container = segments.reduce(
-        ({ acc, refAcc }, key) => acc[key] ?? this.$set(acc, key, Array.isArray(refAcc[key]) ? [] : {}),
+        ({ acc, refAcc }, key) => {
+          const refElement = refAcc[key]
+
+          return {
+            acc: acc[key] ?? this.$set(acc, key, Array.isArray(refElement) ? [] : {}),
+            refAcc: refElement
+          }
+        },
         { acc: this.localeMessages, refAcc: this.$store.state.referenceMessages }
       ).acc
 
@@ -338,7 +344,7 @@ export default {
       return Math.floor(translated.length / reference.length * 100)
     },
     buildTreeEntries () {
-      const entries = Object.keys(this.referenceBase).map((id) => {
+      return Object.keys(this.referenceBase).map((id) => {
         const reference = this.referenceBase[id]
         const translation = this.localeBase[id]
         const type = typeof reference !== 'object' ? 'entry' : 'directory'
@@ -352,8 +358,6 @@ export default {
           dirty: DeepDiff(this.originalLocaleBase[id], translation)
         }
       })
-
-      return entries
     },
     buildFlatEntries () {
       const acc = []

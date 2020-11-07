@@ -34,7 +34,7 @@
         </template>
       </Navigation>
     </portal>
-    <router-view :type="type" />
+    <router-view :type="type" @save="update" />
   </div>
 </template>
 
@@ -57,6 +57,7 @@ export default {
   },
   data () {
     return {
+      refreshTime: null,
       searchText: null,
       typeFilter: 'both'
     }
@@ -66,6 +67,8 @@ export default {
       return this.$route.params.locale
     },
     entries () {
+      // eslint-disable-next-line no-unused-expressions
+      this.refreshTime
       const base = this.$store.state.reference[this.type]
       const unfiltered = base.map(e => ({
         id: e,
@@ -101,6 +104,9 @@ export default {
     },
     changeTypeFilter () {
       this.typeFilter = ({ both: 'untranslated', untranslated: 'translated', translated: 'both' })[this.typeFilter]
+    },
+    update () {
+      this.refreshTime = Date.now()
     }
   }
 }

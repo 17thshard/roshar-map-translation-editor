@@ -22,7 +22,7 @@ export default new Vuex.Store({
     setDirtyHandler (state, handler) {
       state.dirtyHandler = handler
     },
-    removeDirtHandler (state) {
+    removeDirtyHandler (state) {
       state.dirtyHandler = null
     }
   },

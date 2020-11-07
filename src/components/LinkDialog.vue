@@ -78,7 +78,7 @@ export default {
   mixins: [VueDialogMixin],
   data () {
     return {
-      text: null,
+      text: this.options.defaultText,
       internal: true,
       internalType: 'events',
       internalEntry: window.store.state.reference.events[0],

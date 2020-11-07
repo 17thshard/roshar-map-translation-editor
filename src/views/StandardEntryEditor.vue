@@ -90,7 +90,7 @@ export default {
       'setDirtyHandler',
       async (to, from, next) => {
         if (!this.dirty) {
-          this.$store.commit('removeDirtHandler')
+          this.$store.commit('removeDirtyHandler')
           next()
           return
         }
@@ -105,7 +105,7 @@ export default {
             this.save()
           }
 
-          this.$store.commit('removeDirtHandler')
+          this.$store.commit('removeDirtyHandler')
           next()
         } catch {
           next(false)
@@ -140,6 +140,8 @@ export default {
       if (this.locale === 'en') {
         this.$store.commit('reloadReference')
       }
+
+      this.$emit('save')
     }
   }
 }
