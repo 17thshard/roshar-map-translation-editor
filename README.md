@@ -22,6 +22,12 @@
   An editor for the translation files used for interactive map and timeline of Roshar. Built using <a href="https://vuejs.org/">Vue.js</a> and <a href="https://electronjs.org/">Electron</a>.
 </p>
 
+## Usage
+
+You need to have the [app's repository](https://github.com/Palanaeum/roshar-map) cloned locally. Then, download the latest version of the editor for your operating from the [Releases](https://github.com/Palanaeum/roshar-map-translation-editor/releases) page. Note that the executables for Windows and MacOS are *not* signed, so you might be prompted on startup that the application is unsafe. On first launch, the application will ask you for a "working directory". Point it at your clone of the map repository.
+
+Come join our [Discord server](https://discord.gg/x9hjkKXBew) for translation work if you have any trouble, otherwise need help, or simply want to coordinate a translation effort!
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE). Please familiarize yourself with it if you wish to contribute.
