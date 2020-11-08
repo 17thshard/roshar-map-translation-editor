@@ -231,7 +231,7 @@ body.dg-open {
   font-size: 1rem;
 }
 
-.dg-buttons {
+.dg-buttons, .dg-content-footer {
   display: flex;
   background: #F3F5F7;
   border-bottom-left-radius: 3px;
@@ -255,7 +255,7 @@ body.dg-open {
   margin-right: 1rem;
   border-radius: 2px;
 
-  &:last-child {
+  &:last-of-type {
     margin-right: 0;
   }
 
@@ -299,7 +299,7 @@ body.dg-open {
 }
 
 .dg-pull-right {
-  float: right;
+  margin-left: auto;
 }
 
 .dg-btn.dg-btn--loading .dg-btn-content {

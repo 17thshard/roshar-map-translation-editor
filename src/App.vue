@@ -244,6 +244,7 @@ textarea {
     background: #e1e2e6;
 
     &-buttons {
+      display: flex;
       margin-left: auto;
     }
 
@@ -263,6 +264,7 @@ textarea {
       border-radius: 3px;
       margin-left: 0.5rem;
       position: relative;
+      text-decoration: none;
 
       &:hover, &:active, &:focus {
         background: lighten(#0f3562, 10%);
@@ -272,6 +274,16 @@ textarea {
         opacity: 0.5;
         background: #0f3562 !important;
         cursor: not-allowed;
+      }
+
+      &--cancel {
+        background: none;
+        color: #F52C22;
+
+        &:hover, &:active, &:focus {
+          background: none;
+          color: darken(#F52C22, 10%)
+        }
       }
     }
   }

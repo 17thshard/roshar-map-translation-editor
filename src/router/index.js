@@ -9,6 +9,7 @@ import EventEditor from '@/views/EventEditor.vue'
 import store from '@/store'
 import MessageList from '@/views/MessageList.vue'
 import MessageEditor from '@/views/MessageEditor.vue'
+import NewLocale from '@/views/NewLocale.vue'
 
 Vue.use(VueRouter)
 
@@ -20,6 +21,15 @@ const routes = [
     meta: {
       hideSidebar: true,
       hideHeader: true
+    }
+  },
+  {
+    path: '/locales/new',
+    name: 'locale.new',
+    component: NewLocale,
+    meta: {
+      hideSidebar: true,
+      toolbar: true
     }
   },
   {

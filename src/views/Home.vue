@@ -20,17 +20,26 @@
           <ChevronRightIcon />
         </router-link>
       </li>
+      <li class="home__locales-entry home__locales-entry--new">
+        <router-link :to="{ name: 'locale.new' }">
+          <div class="home__locales-new-icon">
+            <PlusCircleIcon size="1x" />
+          </div>
+          <h3>Create new language</h3>
+          <ChevronRightIcon />
+        </router-link>
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { ChevronRightIcon } from 'vue-feather-icons'
+import { ChevronRightIcon, PlusCircleIcon } from 'vue-feather-icons'
 import Flag from '@/components/Flag.vue'
 
 export default {
   name: 'Home',
-  components: { Flag, ChevronRightIcon },
+  components: { Flag, ChevronRightIcon, PlusCircleIcon },
   data () {
     return {
       workingDirectory: window.workingDirectory
@@ -117,11 +126,27 @@ export default {
           color: rgba(#2c3e50, 0.6);
         }
 
-        .feather {
+        & > .feather {
+          grid-column: 3;
+          grid-row: 1/span 2;
+        }
+      }
+
+      &--new {
+        h3 {
           grid-row: 1/span 2;
         }
       }
     }
+  }
+
+  &__locales-new-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    grid-row: 1/span 2;
+    font-size: 2rem;
   }
 
   &__working-directory button {

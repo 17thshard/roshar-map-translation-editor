@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, shell } from 'electron'
 import * as read from '@/model/read'
 import * as write from '@/model/write'
 
@@ -58,3 +58,5 @@ Object.assign(window, write)
 window.isTranslated = (lang, type, entry) => {
   return fs.existsSync(path.resolve(window.workingDirectory, 'translations', lang, type, `${entry}.md`))
 }
+
+window.openLink = shell.openExternal
