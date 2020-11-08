@@ -102,7 +102,7 @@ function isValidDirectory (workingDirectory) {
   }
 
   return fs.existsSync(path.resolve(workingDirectory, 'translations', 'en')) &&
-    fs.existsSync(path.resolve(workingDirectory, 'src', 'lang', 'en.json')) &&
+    fs.existsSync(path.resolve(workingDirectory, 'src', 'lang', 'en.lang.json')) &&
     fs.existsSync(path.resolve(workingDirectory, 'translation-comments.json'))
 }
 

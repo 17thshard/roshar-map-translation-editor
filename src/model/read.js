@@ -21,7 +21,7 @@ export function loadReferenceMessages () {
 }
 
 export function loadMessages (lang) {
-  const path = paths.resolve(window.workingDirectory, 'src', 'lang', `${lang}.json`)
+  const path = paths.resolve(window.workingDirectory, 'src', 'lang', `${lang}.lang.json`)
   if (!fs.existsSync(path)) {
     return {}
   }

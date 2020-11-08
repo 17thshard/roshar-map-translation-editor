@@ -2,7 +2,7 @@ import fs from 'fs'
 import paths from 'path'
 
 export function saveMessages (lang, messages) {
-  return fs.writeFileSync(paths.resolve(window.workingDirectory, 'src', 'lang', `${lang}.json`), JSON.stringify(messages, undefined, 4))
+  return fs.writeFileSync(paths.resolve(window.workingDirectory, 'src', 'lang', `${lang}.lang.json`), JSON.stringify(messages, undefined, 4))
 }
 
 export function saveContent (lang, type, entry, content) {
