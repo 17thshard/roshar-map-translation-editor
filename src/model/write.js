@@ -9,7 +9,12 @@ export function saveMessages (lang, messages) {
 }
 
 export function saveContent (lang, type, entry, content) {
-  const path = paths.resolve(window.workingDirectory, 'translations', lang, type, `${entry}.md`)
+  const directory = paths.resolve(window.workingDirectory, 'translations', lang, type)
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true })
+  }
+
+  const path = paths.resolve(directory, `${entry}.md`)
   const text = type === 'events' ? buildEventFile(content) : buildFile(content)
 
   return fs.writeFileSync(path, text)
