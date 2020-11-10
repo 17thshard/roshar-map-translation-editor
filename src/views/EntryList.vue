@@ -21,8 +21,14 @@
         </div>
         <template v-slot:link="entry">
           <router-link class="entry-list__entry" :to="{ name: `locale.${type}.edit`, params: { ...$route.params, id: entry.id } }">
-            <span :class="['entry-list__entry-indicator', { 'entry-list__entry-indicator--translated': entry.translated }]">
+            <span
+              v-if="entry.errored !== true"
+              :class="['entry-list__entry-indicator', { 'entry-list__entry-indicator--translated': entry.translated }]"
+            >
               ◆
+            </span>
+            <span v-else class="entry-list__entry-error">
+              !
             </span>
             <span class="entry-list__entry-title">
               {{ entry.title }}
@@ -34,6 +40,21 @@
         </template>
       </Navigation>
     </portal>
+    <template v-if="unfiltered.errors.length > 0 && $route.name === `locale.${type}`">
+      <section class="entry-list__errors">
+        The following errors occured while trying to read the entries in this category:
+        <table>
+          <tr>
+            <th>Entry</th>
+            <th>Error</th>
+          </tr>
+          <tr v-for="{ entry, message } in unfiltered.errors" :key="entry">
+            <td>{{ entry }}</td>
+            <td>{{ message }}</td>
+          </tr>
+        </table>
+      </section>
+    </template>
     <router-view :type="type" @save="update" />
   </div>
 </template>
@@ -66,23 +87,28 @@ export default {
     locale () {
       return this.$route.params.locale
     },
-    entries () {
+    unfiltered () {
       // eslint-disable-next-line no-unused-expressions
       this.refreshTime
       const base = this.$store.state.reference[this.type]
-      const unfiltered = base.map(e => ({
+      const errors = []
+
+      const entries = base.map(e => ({
         id: e,
-        title: window.getTitle(this.locale, this.type, e),
-        translated: window.isTranslated(this.locale, this.type, e)
+        translated: window.isTranslated(this.locale, this.type, e),
+        ...this.getPropertiesSafe(e, errors)
       }))
 
+      return { entries, errors }
+    },
+    entries () {
       const searchText = (this.searchText?.trim() ?? '').toLowerCase()
 
       return searchText.length > 0 || this.typeFilter !== 'both'
-        ? unfiltered.filter(e =>
+        ? this.unfiltered.entries.filter(e =>
           (e.id.toLowerCase().includes(searchText) || e.title.toLowerCase().includes(searchText)) && this.shouldInclude(e)
         )
-        : unfiltered
+        : this.unfiltered.entries
     },
     typeFilterLabel () {
       return ({
@@ -93,6 +119,19 @@ export default {
     }
   },
   methods: {
+    getPropertiesSafe (entry, errors) {
+      try {
+        return { title: window.getTitle(this.locale, this.type, entry) }
+      } catch (initialError) {
+        errors.push({ entry, message: initialError.message })
+
+        try {
+          return { title: window.getTitle('en', this.type, entry), errored: true }
+        } catch {
+          return { title: entry, errored: true }
+        }
+      }
+    },
     shouldInclude (entry) {
       if (this.typeFilter === 'translated') {
         return entry.translated === true
@@ -229,6 +268,13 @@ export default {
       }
     }
 
+    &-error {
+      align-self: flex-start;
+      color: #f31f1f;
+      text-align: center;
+      font-weight: 700;
+    }
+
     &-title {
       text-overflow: ellipsis;
       grid-column: 2;
@@ -241,6 +287,18 @@ export default {
       color: rgba(#f6f7fc, 0.8);
       font-weight: 500;
       text-overflow: ellipsis;
+    }
+  }
+
+  &__errors {
+    padding: 0.5rem 1rem;
+
+    table {
+      width: 100%;
+
+      th {
+        text-align: start;
+      }
     }
   }
 }

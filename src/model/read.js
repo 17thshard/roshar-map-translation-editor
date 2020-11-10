@@ -87,7 +87,7 @@ function parseSections (content, ignoreOutsideOfSections) {
     if (currentSection === undefined && ignoreOutsideOfSections === true) {
       return
     } else if (currentSection === undefined) {
-      throw new Error('Line found outside of section')
+      throw new Error('Line found outside of section, you might have forgotten the title starting with "#"')
     }
 
     currentSection.content += line + '\n'

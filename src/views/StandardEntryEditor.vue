@@ -2,6 +2,9 @@
   <form class="standard-entry-editor">
     <label for="standard-entry-editor__id">ID</label>
     <input id="standard-entry-editor__id" type="text" :value="id" readonly>
+    <p v-if="error !== null" class="standard-entry-editor__error">
+      The following error occurred while trying to read the translated file for this entry: {{ error }}
+    </p>
     <label for="standard-entry-editor__name">
       Name
       <button v-if="locale !== 'en'" class="standard-entry-editor__action" type="button" @click="name = reference.root.name">
@@ -57,7 +60,8 @@ export default {
       chapter: null,
       initialName: null,
       initialText: null,
-      initialChapter: null
+      initialChapter: null,
+      error: null
     }
   },
   computed: {
@@ -115,7 +119,15 @@ export default {
   },
   methods: {
     update () {
-      const content = window.getContent(this.locale, this.type, this.id)
+      let content
+      try {
+        content = window.getContent(this.locale, this.type, this.id)
+        this.error = null
+      } catch (e) {
+        this.error = e.message
+
+        return
+      }
 
       if (content === null) {
         this.name = this.initialName = ''
@@ -152,6 +164,11 @@ export default {
   display: flex;
   flex-direction: column;
   padding: 0.5rem 1rem;
+
+  &__error {
+    color: #f31f1f;
+    margin: 0 0 0.5rem;
+  }
 
   label {
     text-transform: uppercase;
