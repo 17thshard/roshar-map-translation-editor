@@ -1,5 +1,6 @@
 <script>
 import markdown from 'simple-markdown'
+import '@/assets/fonts/hebrew.scss'
 
 const LINK_INSIDE = '(?:\\[[^\\]]*\\]|[^\\[\\]]|\\](?=[^\\[]*\\]))*'
 const LINK_HREF_AND_TITLE = '\\s*<?((?:\\([^)]*\\)|[^\\s\\\\]|\\\\.)*?)>?(?:\\s+[\'"]([\\s\\S]*?)[\'"])?\\s*'
@@ -173,7 +174,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 .markdown {
-  font-family: 'Libre Baskerville', serif;
+  font-family: 'Libre Baskerville', 'Hadasim CLM', serif;
 
   a {
     display: inline;
