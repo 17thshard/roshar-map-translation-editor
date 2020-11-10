@@ -11,14 +11,20 @@
         Copy Original
       </button>
     </label>
-    <input id="standard-entry-editor__name" v-model="name" type="text" :placeholder="locale !== 'en' ? reference.root.name : ''">
+    <input
+      id="standard-entry-editor__name"
+      v-model="name"
+      type="text"
+      :placeholder="locale !== 'en' ? reference.root.name : ''"
+      :dir="textDirection"
+    >
     <label for="standard-entry-editor__text">
       Text
       <button v-if="locale !== 'en'" class="standard-entry-editor__action" type="button" @click="text = reference.root.content">
         Copy Original
       </button>
     </label>
-    <MarkdownEditor id="standard-entry-editor__text" :key="`${locale}-${id}-text`" v-model="text" />
+    <MarkdownEditor id="standard-entry-editor__text" :key="`${locale}-${id}-text`" v-model="text" :direction="textDirection" />
     <label for="standard-entry-editor__chapter">
       Chapter
       <button
@@ -30,7 +36,13 @@
         Copy Original
       </button>
     </label>
-    <MarkdownEditor id="standard-entry-editor__chapter" :key="`${locale}-${id}-chapter`" v-model="chapter" inline />
+    <MarkdownEditor
+      id="standard-entry-editor__chapter"
+      :key="`${locale}-${id}-chapter`"
+      v-model="chapter"
+      :direction="textDirection"
+      inline
+    />
     <portal to="toolbar">
       <div class="app__toolbar-buttons">
         <button type="button" class="app__toolbar-button" :disabled="!dirty" @click="save">
@@ -76,6 +88,9 @@ export default {
     },
     dirty () {
       return this.name?.trim() !== this.initialName || this.text?.trim() !== this.initialText || this.chapter?.trim() !== this.initialChapter
+    },
+    textDirection () {
+      return window.getTextDirection(this.locale)
     }
   },
   watch: {

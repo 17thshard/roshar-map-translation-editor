@@ -77,6 +77,7 @@ export default {
       a {
         display: flex;
         align-items: center;
+        text-align: start;
         color: #f6f7fc;
         text-decoration: none;
         padding: 0.25rem 0.5rem;

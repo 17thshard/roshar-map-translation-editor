@@ -84,6 +84,7 @@
         :class="['markdown-editor__preview', { 'markdown-editor__preview--inline': inline }]"
         :content="value"
         :inline="inline"
+        :dir="direction"
       />
     </div>
   </div>
@@ -189,6 +190,11 @@ export default {
     value: {
       type: String,
       default: '',
+      required: false
+    },
+    direction: {
+      type: String,
+      default: 'ltr',
       required: false
     },
     options: {
@@ -435,7 +441,14 @@ export default {
         return
       }
       const shortcuts = {}
-      const o = Object.assign({ mode: 'markdown', extraKeys: shortcuts, lint: true, noNewlines: this.inline === true }, this.options)
+      const o = {
+        mode: 'markdown',
+        extraKeys: shortcuts,
+        lint: true,
+        noNewlines: this.inline === true,
+        direction: this.direction,
+        ...this.options
+      }
       const ed = this.editor = CodeMirror.fromTextArea(this.$refs.textarea, o)
       ed.setValue(this.value ?? '')
       ed.setSize(this.width, this.height)

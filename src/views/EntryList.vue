@@ -42,7 +42,7 @@
     </portal>
     <template v-if="unfiltered.errors.length > 0 && $route.name === `locale.${type}`">
       <section class="entry-list__errors">
-        The following errors occured while trying to read the entries in this category:
+        The following errors occurred while trying to read the entries in this category:
         <table>
           <tr>
             <th>Entry</th>

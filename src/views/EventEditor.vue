@@ -11,28 +11,34 @@
         Copy Original
       </button>
     </label>
-    <input id="event-editor__name" v-model="name" type="text" :placeholder="locale !== 'en' ? reference.root.name : ''">
+    <input
+      id="event-editor__name"
+      v-model="name"
+      type="text"
+      :placeholder="locale !== 'en' ? reference.root.name : ''"
+      :dir="textDirection"
+    >
     <label for="event-editor__blurb">
       Blurb
       <button v-if="locale !== 'en'" class="event-editor__action" type="button" @click="blurb = reference.root.content">
         Copy Original
       </button>
     </label>
-    <MarkdownEditor id="event-editor__blurb" :key="`${locale}-${id}-blurb`" v-model="blurb" inline />
+    <MarkdownEditor id="event-editor__blurb" :key="`${locale}-${id}-blurb`" v-model="blurb" :direction="textDirection" inline />
     <label for="event-editor__text">
       Details
       <button v-if="locale !== 'en'" class="event-editor__action" type="button" @click="text = reference.root.content">
         Copy Original
       </button>
     </label>
-    <MarkdownEditor id="event-editor__text" :key="`${locale}-${id}-text`" v-model="text" />
+    <MarkdownEditor id="event-editor__text" :key="`${locale}-${id}-text`" v-model="text" :direction="textDirection" />
     <label for="event-editor__chapter">
       Chapter
       <button v-if="locale !== 'en'" class="event-editor__action" type="button" @click="chapter = reference.metadata.chapter">
         Copy Original
       </button>
     </label>
-    <MarkdownEditor id="event-editor__chapter" :key="`${locale}-${id}-chapter`" v-model="chapter" inline />
+    <MarkdownEditor id="event-editor__chapter" :key="`${locale}-${id}-chapter`" v-model="chapter" :direction="textDirection" inline />
     <portal to="toolbar">
       <div class="app__toolbar-buttons">
         <button type="button" class="app__toolbar-button" :disabled="!dirty" @click="save">
@@ -80,6 +86,9 @@ export default {
     },
     dirty () {
       return this.name?.trim() !== this.initialName || this.blurb?.trim() !== this.initialBlurb || this.text?.trim() !== this.initialText || this.chapter?.trim() !== this.initialChapter
+    },
+    textDirection () {
+      return window.getTextDirection(this.locale)
     }
   },
   watch: {

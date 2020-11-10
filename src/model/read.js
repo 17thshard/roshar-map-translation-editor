@@ -28,6 +28,10 @@ export function loadMessages (lang) {
   return JSON.parse(fs.readFileSync(path, 'utf8'))
 }
 
+export function getTextDirection (lang) {
+  return loadMessages(lang)['text-direction'] || 'ltr'
+}
+
 export function loadMessageComments () {
   const data = JSON.parse(fs.readFileSync(paths.resolve(window.workingDirectory, 'translation-comments.json'), 'utf8'))
 

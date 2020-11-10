@@ -25,6 +25,7 @@
       type="text"
       :value="translation"
       :placeholder="locale !== 'en' ? reference : ''"
+      :dir="textDirection"
       @input="$emit('input', { path, value: $event.target.value })"
     >
     <MarkdownEditor
@@ -32,6 +33,7 @@
       id="event-editor__text"
       :key="`${locale}-${path}-text`"
       :value="translation"
+      :direction="textDirection"
       :inline="comment.markdown === 'inline'"
       @input="$emit('input', { path, value: $event })"
     />
@@ -87,6 +89,9 @@ export default {
     },
     comment () {
       return this.$store.state.messageComments[this.path] ?? {}
+    },
+    textDirection () {
+      return window.getTextDirection(this.locale)
     },
     reference () {
       const enhancedMessages = this.locale === 'en'
