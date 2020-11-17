@@ -27,7 +27,12 @@
     <MarkdownEditor id="event-editor__blurb" :key="`${locale}-${id}-blurb`" v-model="blurb" :direction="textDirection" inline />
     <label for="event-editor__text">
       Details
-      <button v-if="locale !== 'en'" class="event-editor__action" type="button" @click="text = reference.root.content">
+      <button
+        v-if="locale !== 'en'"
+        class="event-editor__action"
+        type="button"
+        @click="text = (reference.sections.details || {}).content || ''"
+      >
         Copy Original
       </button>
     </label>
